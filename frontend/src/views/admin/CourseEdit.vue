@@ -77,6 +77,6 @@ async function handleSubmit() {
   if (!valid) return
   if (isEdit.value) { await updateCourse(form) } else { await createCourse(form) }
   ElMessage.success('保存成功')
-  router.push('/teacher/courses')
+  router.push('/admin/courses')
 }
 </script>

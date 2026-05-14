@@ -28,14 +28,27 @@ export function updateCourseStatus(id, status) {
   return request.put(`/course/${id}/status`, null, { params: { status } })
 }
 
-export function getCourseCategories() {
-  return request.get('/course/categories')
+// 课程分类 - 路径与后端 /course/category 对齐
+export function getCourseCategories(params) {
+  return request.get('/course/category/list', { params })
+}
+
+export function getAllCourseCategories() {
+  return request.get('/course/category/all')
+}
+
+export function getCourseCategoryById(id) {
+  return request.get(`/course/category/${id}`)
 }
 
 export function createCategory(data) {
-  return request.post('/course/categories', data)
+  return request.post('/course/category', data)
+}
+
+export function updateCategory(data) {
+  return request.put('/course/category', data)
 }
 
 export function deleteCategory(id) {
-  return request.delete(`/course/categories/${id}`)
+  return request.delete(`/course/category/${id}`)
 }

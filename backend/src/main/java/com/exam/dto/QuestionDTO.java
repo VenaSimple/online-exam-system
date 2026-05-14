@@ -14,4 +14,7 @@ public class QuestionDTO {
     private String categoryName;
     private Integer difficulty;
     private Integer score;
+    private Long creatorId;
+    private String creatorName;
+    private java.time.LocalDateTime createTime;
 }

@@ -89,6 +89,6 @@ async function handleSubmit() {
   form.options = JSON.stringify(options.value)
   if (isEdit.value) await updateQuestion(form); else await createQuestion(form)
   ElMessage.success('保存成功')
-  router.push('/teacher/questions')
+  router.push('/admin/questions')
 }
 </script>

@@ -5,6 +5,7 @@ import com.exam.common.Result;
 import com.exam.dto.QuestionDTO;
 import com.exam.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +34,14 @@ public class QuestionController {
     }
 
     @PostMapping
-    public Result<Void> create(@RequestBody QuestionDTO dto) {
+    public Result<Void> create(@RequestBody QuestionDTO dto, Authentication authentication) {
+        // 自动填充创建者信息
+        if (authentication != null) {
+            Long userId = (Long) authentication.getPrincipal();
+            String username = authentication.getName();
+            dto.setCreatorId(userId);
+            dto.setCreatorName(username);
+        }
         questionService.createQuestion(dto);
         return Result.success();
     }

@@ -40,7 +40,14 @@ public class CourseController {
     }
 
     @PostMapping
-    public Result<Void> create(@RequestBody CourseDTO dto) {
+    public Result<Void> create(@RequestBody CourseDTO dto, Authentication authentication) {
+        // 自动填充讲师信息（如果前端未传）
+        if (authentication != null && dto.getTeacherId() == null) {
+            Long userId = (Long) authentication.getPrincipal();
+            String username = authentication.getName();
+            dto.setTeacherId(userId);
+            dto.setTeacherName(username);
+        }
         courseService.createCourse(dto);
         return Result.success();
     }

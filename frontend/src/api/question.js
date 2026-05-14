@@ -28,12 +28,25 @@ export function importQuestions(data) {
   return request.post('/question/import', data)
 }
 
-export function getQuestionCategories() {
-  return request.get('/question/category/list')
+// 题目分类
+export function getQuestionCategories(params) {
+  return request.get('/question/category/list', { params })
+}
+
+export function getAllQuestionCategories() {
+  return request.get('/question/category/all')
+}
+
+export function getQuestionCategoryById(id) {
+  return request.get(`/question/category/${id}`)
 }
 
 export function createQuestionCategory(data) {
   return request.post('/question/category', data)
+}
+
+export function updateQuestionCategory(data) {
+  return request.put('/question/category', data)
 }
 
 export function deleteQuestionCategory(id) {

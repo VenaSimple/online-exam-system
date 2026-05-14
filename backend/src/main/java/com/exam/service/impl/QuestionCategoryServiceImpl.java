@@ -5,9 +5,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.exam.common.PageResult;
 import com.exam.dto.QuestionCategoryDTO;
+import com.exam.entity.Question;
 import com.exam.entity.QuestionCategory;
 import com.exam.mapper.QuestionCategoryMapper;
+import com.exam.mapper.QuestionMapper;
 import com.exam.service.QuestionCategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -16,7 +19,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class QuestionCategoryServiceImpl extends ServiceImpl<QuestionCategoryMapper, QuestionCategory> implements QuestionCategoryService {
+
+    private final QuestionMapper questionMapper;
 
     @Override
     public PageResult<QuestionCategoryDTO> listCategories(Integer pageNum, Integer pageSize, String keyword) {
@@ -56,6 +62,7 @@ public class QuestionCategoryServiceImpl extends ServiceImpl<QuestionCategoryMap
     public void createCategory(QuestionCategoryDTO dto) {
         QuestionCategory entity = new QuestionCategory();
         BeanUtils.copyProperties(dto, entity);
+        entity.setQuestionCount(0);
         this.save(entity);
     }
 
@@ -69,6 +76,12 @@ public class QuestionCategoryServiceImpl extends ServiceImpl<QuestionCategoryMap
 
     @Override
     public void deleteCategory(Long id) {
+        // 检查是否有子分类
+        long childCount = this.count(new LambdaQueryWrapper<QuestionCategory>().eq(QuestionCategory::getParentId, id));
+        if (childCount > 0) throw new RuntimeException("该分类下存在子分类，无法删除");
+        // 检查是否有题目引用
+        long questionCount = questionMapper.selectCount(new LambdaQueryWrapper<Question>().eq(Question::getCategoryId, id));
+        if (questionCount > 0) throw new RuntimeException("该分类下存在题目，无法删除");
         this.removeById(id);
     }
 }

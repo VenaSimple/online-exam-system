@@ -5,9 +5,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.exam.common.PageResult;
 import com.exam.dto.CourseCategoryDTO;
+import com.exam.entity.Course;
 import com.exam.entity.CourseCategory;
 import com.exam.mapper.CourseCategoryMapper;
+import com.exam.mapper.CourseMapper;
 import com.exam.service.CourseCategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -16,7 +19,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CourseCategoryServiceImpl extends ServiceImpl<CourseCategoryMapper, CourseCategory> implements CourseCategoryService {
+
+    private final CourseMapper courseMapper;
 
     @Override
     public PageResult<CourseCategoryDTO> listCategories(Integer pageNum, Integer pageSize, String keyword) {
@@ -69,6 +75,12 @@ public class CourseCategoryServiceImpl extends ServiceImpl<CourseCategoryMapper,
 
     @Override
     public void deleteCategory(Long id) {
+        // 检查是否有子分类
+        long childCount = this.count(new LambdaQueryWrapper<CourseCategory>().eq(CourseCategory::getParentId, id));
+        if (childCount > 0) throw new RuntimeException("该分类下存在子分类，无法删除");
+        // 检查是否有课程引用
+        long courseCount = courseMapper.selectCount(new LambdaQueryWrapper<Course>().eq(Course::getCategoryId, id));
+        if (courseCount > 0) throw new RuntimeException("该分类下存在课程，无法删除");
         this.removeById(id);
     }
 }
