@@ -32,6 +32,6 @@ public class PortalController {
     }
     @GetMapping("/notices")
     public Result<PageResult<NoticeDTO>> notices(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
-        return Result.success(noticeService.listNotices(pageNum, pageSize, null));
+        return Result.success(noticeService.listNotices(pageNum, pageSize, null, null));
     }
 }
