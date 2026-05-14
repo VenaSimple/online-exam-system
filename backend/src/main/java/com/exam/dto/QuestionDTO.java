@@ -1,0 +1,17 @@
+package com.exam.dto;
+
+import lombok.Data;
+
+@Data
+public class QuestionDTO {
+    private Long id;
+    private String content;
+    private Integer type;
+    private String options;
+    private String answer;
+    private String analysis;
+    private Long categoryId;
+    private String categoryName;
+    private Integer difficulty;
+    private Integer score;
+}
