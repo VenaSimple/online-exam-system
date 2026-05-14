@@ -17,6 +17,11 @@
         <el-menu-item index="/admin/news"><el-icon><ChatDotRound /></el-icon><span>新闻资讯</span></el-menu-item>
         <el-menu-item index="/admin/orgs"><el-icon><OfficeBuilding /></el-icon><span>组织架构</span></el-menu-item>
         <el-menu-item index="/admin/knowledge"><el-icon><Collection /></el-icon><span>知识库</span></el-menu-item>
+        <el-menu-item index="/admin/banners"><el-icon><Picture /></el-icon><span>轮播图管理</span></el-menu-item>
+        <el-menu-item index="/admin/student-courses"><el-icon><School /></el-icon><span>学员开课</span></el-menu-item>
+        <el-menu-item index="/admin/majors"><el-icon><Reading /></el-icon><span>专业设置</span></el-menu-item>
+        <el-menu-item index="/admin/permissions"><el-icon><Lock /></el-icon><span>权限管理</span></el-menu-item>
+        <el-menu-item index="/admin/config"><el-icon><Setting /></el-icon><span>系统配置</span></el-menu-item>
       </el-menu>
     </el-aside>
     <el-container>

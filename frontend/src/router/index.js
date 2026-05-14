@@ -2,6 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
+    path: '/portal',
+    name: 'Portal',
+    component: () => import('../views/Portal.vue')
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/login/Login.vue')
@@ -69,9 +74,14 @@ const routes = [
       { path: 'news', name: 'AdminNews', component: () => import('../views/admin/News.vue') },
       { path: 'orgs', name: 'AdminOrgs', component: () => import('../views/admin/Orgs.vue') },
       { path: 'knowledge', name: 'AdminKnowledge', component: () => import('../views/admin/Knowledge.vue') },
+      { path: 'banners', name: 'AdminBanners', component: () => import('../views/admin/Banners.vue') },
+      { path: 'config', name: 'AdminConfig', component: () => import('../views/admin/Config.vue') },
+      { path: 'majors', name: 'AdminMajors', component: () => import('../views/admin/Majors.vue') },
+      { path: 'permissions', name: 'AdminPermissions', component: () => import('../views/admin/Permissions.vue') },
+      { path: 'student-courses', name: 'AdminStudentCourses', component: () => import('../views/admin/StudentCourses.vue') },
     ]
   },
-  { path: '/', redirect: '/login' }
+  { path: '/', redirect: '/portal' }
 ]
 
 const router = createRouter({
@@ -84,14 +94,14 @@ router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
   const role = localStorage.getItem('role')
 
-  if (to.path === '/login' || to.path === '/register') {
+  // 门户页面无需登录
+  if (to.path === '/portal' || to.path === '/login' || to.path === '/register') {
     next()
   } else if (!token) {
-    next('/login')
+    next('/portal')
   } else {
     const requiredRole = to.matched.find(r => r.meta.role)?.meta?.role
     if (requiredRole && role !== requiredRole && role !== 'admin') {
-      // admin can access all, others need matching role
       if (role === 'admin') {
         next()
       } else {

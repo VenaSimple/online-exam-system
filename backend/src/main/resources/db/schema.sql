@@ -306,6 +306,89 @@ CREATE TABLE certificate (
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP
 ) COMMENT '证书/学习证明';
 
+-- 轮播图
+DROP TABLE IF EXISTS banner;
+CREATE TABLE banner (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    image_url VARCHAR(500) COMMENT '图片地址',
+    link_url VARCHAR(500) COMMENT '跳转链接',
+    sort INT DEFAULT 0,
+    status INT DEFAULT 1 COMMENT '0禁用1启用',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP
+) COMMENT '轮播图';
+
+-- 考试场次
+DROP TABLE IF EXISTS exam_session;
+CREATE TABLE exam_session (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    exam_id BIGINT NOT NULL,
+    session_name VARCHAR(200) COMMENT '场次名称',
+    start_time DATETIME NOT NULL,
+    end_time DATETIME NOT NULL,
+    duration INT DEFAULT 60 COMMENT '时长(分钟)',
+    status INT DEFAULT 0 COMMENT '0未开始1进行中2已结束',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP
+) COMMENT '考试场次';
+
+-- 学员开课
+DROP TABLE IF EXISTS student_course;
+CREATE TABLE student_course (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    course_id BIGINT NOT NULL,
+    course_title VARCHAR(200),
+    progress INT DEFAULT 0 COMMENT '学习进度',
+    status INT DEFAULT 1 COMMENT '0禁用1启用',
+    assign_by BIGINT COMMENT '分配人',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_user_course (user_id, course_id)
+) COMMENT '学员开课';
+
+-- 系统配置
+DROP TABLE IF EXISTS system_config;
+CREATE TABLE system_config (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    config_key VARCHAR(100) NOT NULL UNIQUE,
+    config_value TEXT,
+    config_desc VARCHAR(200),
+    config_group VARCHAR(50) DEFAULT 'basic',
+    update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) COMMENT '系统配置';
+
+-- 专业设置
+DROP TABLE IF EXISTS major;
+CREATE TABLE major (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    code VARCHAR(50),
+    department_id BIGINT,
+    description TEXT,
+    sort INT DEFAULT 0,
+    status INT DEFAULT 1,
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP
+) COMMENT '专业设置';
+
+-- 权限表
+DROP TABLE IF EXISTS permission;
+CREATE TABLE permission (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    code VARCHAR(100) NOT NULL UNIQUE,
+    resource VARCHAR(200) COMMENT '资源路径',
+    parent_id BIGINT DEFAULT 0,
+    type INT DEFAULT 1 COMMENT '1菜单2按钮',
+    sort INT DEFAULT 0
+) COMMENT '权限表';
+
+-- 角色权限关联
+DROP TABLE IF EXISTS role_permission;
+CREATE TABLE role_permission (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    role VARCHAR(50) NOT NULL,
+    permission_id BIGINT NOT NULL
+) COMMENT '角色权限关联';
+
 -- =========================================================
 -- 初始化数据
 -- =========================================================
@@ -387,3 +470,69 @@ INSERT INTO notice (title, content, type, is_top, publisher_name) VALUES
 -- 新闻资讯
 INSERT INTO news (title, content, summary, author, status) VALUES
 ('在线学习新趋势', '随着互联网技术的不断发展，在线学习已经成为主流学习方式之一...', '探讨在线学习的发展趋势与未来方向', '编辑部', 1);
+
+-- 轮播图
+INSERT INTO banner (title, image_url, link_url, sort, status) VALUES
+('欢迎来到在线培训考试平台', '/banner1.jpg', '/student/courses', 1, 1),
+('Java课程火热报名中', '/banner2.jpg', '/student/course/1', 2, 1),
+('人工智能基础课程上线', '/banner3.jpg', '/student/course/3', 3, 1);
+
+-- 考试场次
+INSERT INTO exam_session (exam_id, session_name, start_time, end_time, duration, status) VALUES
+(1, '第一场 上午场', DATE_ADD(NOW(), INTERVAL 1 DAY), DATE_ADD(NOW(), INTERVAL 1 DAY) + INTERVAL 2 HOUR, 60, 0),
+(1, '第二场 下午场', DATE_ADD(NOW(), INTERVAL 1 DAY) + INTERVAL 4 HOUR, DATE_ADD(NOW(), INTERVAL 1 DAY) + INTERVAL 6 HOUR, 60, 0);
+
+-- 学员开课
+INSERT INTO student_course (user_id, course_id, course_title, progress, status, assign_by) VALUES
+(4, 1, 'Java从入门到精通', 35, 1, 1),
+(4, 2, 'Python数据分析', 10, 1, 1),
+(5, 1, 'Java从入门到精通', 60, 1, 1),
+(5, 3, '人工智能基础', 5, 1, 1);
+
+-- 专业设置
+INSERT INTO major (name, code, description, sort, status) VALUES
+('计算机科学与技术', 'CS', '计算机科学与技术专业', 1, 1),
+('软件工程', 'SE', '软件工程专业', 2, 1),
+('人工智能', 'AI', '人工智能专业', 3, 1),
+('项目管理', 'PM', '项目管理专业', 4, 1);
+
+-- 系统配置
+INSERT INTO system_config (config_key, config_value, config_desc, config_group) VALUES
+('site_name', '在线培训考试系统', '站点名称', 'basic'),
+('site_logo', '', '站点Logo', 'basic'),
+('site_description', '集学、练、考于一体的在线学习平台', '站点描述', 'basic'),
+('wechat_pay_enabled', '0', '微信支付(0关1开)', 'payment'),
+('wechat_pay_appid', '', '微信AppID', 'payment'),
+('wechat_pay_secret', '', '微信支付密钥', 'payment'),
+('alipay_enabled', '0', '支付宝支付(0关1开)', 'payment'),
+('alipay_appid', '', '支付宝AppID', 'payment'),
+('alipay_private_key', '', '支付宝私钥', 'payment'),
+('sms_enabled', '0', '短信服务(0关1开)', 'sms'),
+('sms_api_key', '', '短信API Key', 'sms'),
+('sms_sign_name', '', '短信签名', 'sms'),
+('wechat_login_enabled', '0', '微信登录(0关1开)', 'oauth'),
+('wechat_login_appid', '', '微信登录AppID', 'oauth'),
+('study_weight', '30', '学习进度权重(%)', 'score'),
+('practice_weight', '20', '练习成绩权重(%)', 'score'),
+('exam_weight', '50', '考试成绩权重(%)', 'score');
+
+-- 权限数据
+INSERT INTO permission (name, code, resource, parent_id, type, sort) VALUES
+('用户管理', 'user:manage', '/admin/users', 0, 1, 1),
+('查看用户', 'user:view', '/user/*', 1, 2, 1),
+('创建用户', 'user:create', '/user', 1, 2, 2),
+('编辑用户', 'user:edit', '/user', 1, 2, 3),
+('删除用户', 'user:delete', '/user/*', 1, 2, 4),
+('课程管理', 'course:manage', '/admin/courses', 0, 1, 2),
+('查看课程', 'course:view', '/course/*', 6, 2, 1),
+('创建课程', 'course:create', '/course', 6, 2, 2),
+('编辑课程', 'course:edit', '/course', 6, 2, 3),
+('删除课程', 'course:delete', '/course/*', 6, 2, 4),
+('题库管理', 'question:manage', '/admin/questions', 0, 1, 3),
+('考试管理', 'exam:manage', '/admin/exams', 0, 1, 4),
+('系统设置', 'system:manage', '/admin/config', 0, 1, 5),
+('通知管理', 'notice:manage', '/admin/notices', 0, 1, 6);
+
+-- 管理员拥有全部权限
+INSERT INTO role_permission (role, permission_id)
+SELECT 'admin', id FROM permission;
