@@ -24,8 +24,9 @@ public class ExamController {
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) Integer status) {
-        return Result.success(examService.listExams(pageNum, pageSize, keyword, status));
+            @RequestParam(required = false) Integer status,
+            @RequestParam(required = false) Long courseId) {
+        return Result.success(examService.listExams(pageNum, pageSize, keyword, status, courseId));
     }
 
     @GetMapping("/student")

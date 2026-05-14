@@ -26,10 +26,11 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
     private final ExamPaperQuestionMapper paperQuestionMapper;
 
     @Override
-    public PageResult<ExamPaperDTO> listPapers(Integer pageNum, Integer pageSize, String keyword) {
+    public PageResult<ExamPaperDTO> listPapers(Integer pageNum, Integer pageSize, String keyword, Long courseId) {
         Page<ExamPaper> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<ExamPaper> wrapper = new LambdaQueryWrapper<>();
         if (StringUtils.hasText(keyword)) wrapper.like(ExamPaper::getTitle, keyword);
+        if (courseId != null) wrapper.eq(ExamPaper::getCourseId, courseId);
         wrapper.orderByDesc(ExamPaper::getCreateTime);
         Page<ExamPaper> result = this.page(page, wrapper);
         List<ExamPaperDTO> list = result.getRecords().stream().map(p -> {

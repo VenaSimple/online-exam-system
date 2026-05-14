@@ -138,6 +138,7 @@ CREATE TABLE question (
     analysis TEXT COMMENT '解析',
     category_id BIGINT COMMENT '分类ID',
     category_name VARCHAR(100) COMMENT '分类名称',
+    course_id BIGINT COMMENT '课程ID',
     difficulty INT DEFAULT 1 COMMENT '1简单2中等3困难',
     score INT DEFAULT 2 COMMENT '分值',
     creator_id BIGINT,
@@ -159,6 +160,7 @@ CREATE TABLE exam_paper (
     question_count INT DEFAULT 0 COMMENT '题目数量',
     type INT DEFAULT 1 COMMENT '1固定2随机',
     category_id BIGINT,
+    course_id BIGINT COMMENT '课程ID',
     creator_id BIGINT,
     creator_name VARCHAR(50),
     status INT DEFAULT 0 COMMENT '0草稿1启用',
@@ -184,6 +186,7 @@ CREATE TABLE exam (
     title VARCHAR(200) NOT NULL COMMENT '考试标题',
     paper_id BIGINT COMMENT '试卷ID',
     paper_title VARCHAR(200) COMMENT '试卷标题',
+    course_id BIGINT COMMENT '课程ID',
     exam_type INT DEFAULT 1 COMMENT '1正式2模拟3练习',
     status INT DEFAULT 0 COMMENT '0草稿1已发布2进行中3已结束',
     start_time DATETIME COMMENT '开始时间',
@@ -249,6 +252,7 @@ CREATE TABLE knowledge (
     summary TEXT,
     category_id BIGINT,
     category_name VARCHAR(100),
+    course_id BIGINT COMMENT '课程ID',
     cover VARCHAR(500),
     author_id BIGINT,
     author_name VARCHAR(50),
@@ -269,6 +273,7 @@ CREATE TABLE notice (
     type INT DEFAULT 1 COMMENT '1通知2公告',
     is_top INT DEFAULT 0 COMMENT '0否1是',
     status INT DEFAULT 1 COMMENT '0草稿1已发布',
+    course_id BIGINT COMMENT '课程ID',
     publisher_id BIGINT,
     publisher_name VARCHAR(50),
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -330,6 +335,21 @@ CREATE TABLE exam_session (
     status INT DEFAULT 0 COMMENT '0未开始1进行中2已结束',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP
 ) COMMENT '考试场次';
+
+-- 课程留言
+DROP TABLE IF EXISTS course_message;
+CREATE TABLE course_message (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    course_id BIGINT NOT NULL COMMENT '课程ID',
+    user_id BIGINT NOT NULL COMMENT '留言用户ID',
+    user_name VARCHAR(50) COMMENT '留言用户名',
+    user_avatar VARCHAR(500) COMMENT '用户头像',
+    content TEXT NOT NULL COMMENT '留言内容',
+    parent_id BIGINT DEFAULT 0 COMMENT '回复的留言ID(0为顶级留言)',
+    reply_user_name VARCHAR(50) COMMENT '回复的用户名',
+    status INT DEFAULT 1 COMMENT '0隐藏1显示',
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP
+) COMMENT '课程留言';
 
 -- 学员开课
 DROP TABLE IF EXISTS student_course;
@@ -440,27 +460,27 @@ INSERT INTO question_category (name, question_count) VALUES
 ('通用常识', 0);
 
 -- 示例题目
-INSERT INTO question (content, type, options, answer, analysis, category_id, category_name, difficulty, score, creator_id, creator_name) VALUES
-('Java中哪个关键字用于定义类？', 1, '[{"key":"A","value":"interface"},{"key":"B","value":"class"},{"key":"C","value":"struct"},{"key":"D","value":"define"}]', 'B', 'Java使用class关键字定义类', 1, 'Java基础', 1, 2, 2, '张老师'),
-('以下哪些是Java的基本数据类型？', 2, '[{"key":"A","value":"int"},{"key":"B","value":"String"},{"key":"C","value":"boolean"},{"key":"D","value":"double"}]', 'A,C,D', 'String是引用类型，不是基本数据类型', 1, 'Java基础', 2, 4, 2, '张老师'),
-('Java是一种面向对象的编程语言。', 3, '[{"key":"A","value":"正确"},{"key":"B","value":"错误"}]', 'A', 'Java确实是面向对象的编程语言', 1, 'Java基础', 1, 2, 2, '张老师'),
-('JDK的全称是Java ____ Kit', 4, NULL, 'Development', 'JDK = Java Development Kit', 1, 'Java基础', 2, 3, 2, '张老师'),
-('简述Java中重载(Overload)和重写(Override)的区别。', 5, NULL, '重载发生在同一个类中，方法名相同但参数列表不同；重写发生在子类中，子类重新定义父类的方法，方法签名完全相同。', '重载是编译时多态，重写是运行时多态', 1, 'Java基础', 3, 10, 2, '张老师'),
-('Python中哪个函数用于输出内容？', 1, '[{"key":"A","value":"echo"},{"key":"B","value":"print"},{"key":"C","value":"console.log"},{"key":"D","value":"printf"}]', 'B', 'Python使用print()函数输出', 2, 'Python基础', 1, 2, 3, '李老师'),
-('项目管理的三大约束是？', 2, '[{"key":"A","value":"时间"},{"key":"B","value":"成本"},{"key":"C","value":"范围"},{"key":"D","value":"质量"}]', 'A,B,C', '项目管理三大约束:时间、成本、范围(铁三角)', 3, '项目管理', 2, 4, 3, '李老师');
+INSERT INTO question (content, type, options, answer, analysis, category_id, category_name, course_id, difficulty, score, creator_id, creator_name) VALUES
+('Java中哪个关键字用于定义类？', 1, '[{"key":"A","value":"interface"},{"key":"B","value":"class"},{"key":"C","value":"struct"},{"key":"D","value":"define"}]', 'B', 'Java使用class关键字定义类', 1, 'Java基础', 1, 1, 2, 2, '张老师'),
+('以下哪些是Java的基本数据类型？', 2, '[{"key":"A","value":"int"},{"key":"B","value":"String"},{"key":"C","value":"boolean"},{"key":"D","value":"double"}]', 'A,C,D', 'String是引用类型，不是基本数据类型', 1, 'Java基础', 1, 2, 4, 2, '张老师'),
+('Java是一种面向对象的编程语言。', 3, '[{"key":"A","value":"正确"},{"key":"B","value":"错误"}]', 'A', 'Java确实是面向对象的编程语言', 1, 'Java基础', 1, 1, 2, 2, '张老师'),
+('JDK的全称是Java ____ Kit', 4, NULL, 'Development', 'JDK = Java Development Kit', 1, 'Java基础', 1, 2, 3, 2, '张老师'),
+('简述Java中重载(Overload)和重写(Override)的区别。', 5, NULL, '重载发生在同一个类中，方法名相同但参数列表不同；重写发生在子类中，子类重新定义父类的方法，方法签名完全相同。', '重载是编译时多态，重写是运行时多态', 1, 'Java基础', 1, 3, 10, 2, '张老师'),
+('Python中哪个函数用于输出内容？', 1, '[{"key":"A","value":"echo"},{"key":"B","value":"print"},{"key":"C","value":"console.log"},{"key":"D","value":"printf"}]', 'B', 'Python使用print()函数输出', 2, 'Python基础', 2, 1, 2, 3, '李老师'),
+('项目管理的三大约束是？', 2, '[{"key":"A","value":"时间"},{"key":"B","value":"成本"},{"key":"C","value":"范围"},{"key":"D","value":"质量"}]', 'A,B,C', '项目管理三大约束:时间、成本、范围(铁三角)', 3, '项目管理', 4, 2, 4, 3, '李老师');
 
 -- 示例试卷
-INSERT INTO exam_paper (title, description, total_score, pass_score, duration, question_count, type, creator_id, creator_name, status) VALUES
-('Java基础测试卷', '测试Java基础知识掌握情况', 100, 60, 60, 5, 1, 2, '张老师', 1);
+INSERT INTO exam_paper (title, description, total_score, pass_score, duration, question_count, type, category_id, course_id, creator_id, creator_name, status) VALUES
+('Java基础测试卷', '测试Java基础知识掌握情况', 100, 60, 60, 5, 1, NULL, 1, 2, '张老师', 1);
 
 -- 试卷题目关联
 INSERT INTO exam_paper_question (paper_id, question_id, sort, score) VALUES
 (1, 1, 1, 20), (1, 2, 2, 20), (1, 3, 3, 20), (1, 4, 4, 15), (1, 5, 5, 25);
 
 -- 示例考试
-INSERT INTO exam (title, paper_id, paper_title, exam_type, status, start_time, end_time, duration, total_score, pass_score, creator_id, creator_name) VALUES
-('Java期中考试', 1, 'Java基础测试卷', 1, 1, NOW(), DATE_ADD(NOW(), INTERVAL 30 DAY), 60, 100, 60, 2, '张老师'),
-('Java模拟测试', 1, 'Java基础测试卷', 2, 1, NOW(), DATE_ADD(NOW(), INTERVAL 60 DAY), 60, 100, 60, 2, '张老师');
+INSERT INTO exam (title, paper_id, paper_title, course_id, exam_type, status, start_time, end_time, duration, total_score, pass_score, creator_id, creator_name) VALUES
+('Java期中考试', 1, 'Java基础测试卷', 1, 1, 1, NOW(), DATE_ADD(NOW(), INTERVAL 30 DAY), 60, 100, 60, 2, '张老师'),
+('Java模拟测试', 1, 'Java基础测试卷', 1, 2, 1, NOW(), DATE_ADD(NOW(), INTERVAL 60 DAY), 60, 100, 60, 2, '张老师');
 
 -- 通知公告
 INSERT INTO notice (title, content, type, is_top, publisher_name) VALUES
@@ -536,3 +556,9 @@ INSERT INTO permission (name, code, resource, parent_id, type, sort) VALUES
 -- 管理员拥有全部权限
 INSERT INTO role_permission (role, permission_id)
 SELECT 'admin', id FROM permission;
+
+-- 课程留言
+INSERT INTO course_message (course_id, user_id, user_name, content, parent_id) VALUES
+(1, 4, '王同学', '这门课程讲得非常好，期待更新更多内容！', 0),
+(1, 5, '赵同学', '第二章能不能多加点练习题？', 0),
+(1, 2, '张老师', '好的，我会补充更多练习题。', 2);

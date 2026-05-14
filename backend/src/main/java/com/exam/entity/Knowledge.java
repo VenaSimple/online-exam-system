@@ -17,6 +17,7 @@ public class Knowledge {
     private String summary;
     private Long categoryId;
     private String categoryName;
+    private Long courseId;         // 所属课程ID
     private String cover;
     private Long authorId;
     private String authorName;

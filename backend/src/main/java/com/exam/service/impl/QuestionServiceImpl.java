@@ -26,13 +26,14 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     private final QuestionCategoryMapper questionCategoryMapper;
 
     @Override
-    public PageResult<QuestionDTO> listQuestions(Integer pageNum, Integer pageSize, String keyword, Long categoryId, Integer type, Integer difficulty) {
+    public PageResult<QuestionDTO> listQuestions(Integer pageNum, Integer pageSize, String keyword, Long categoryId, Integer type, Integer difficulty, Long courseId) {
         Page<Question> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Question> wrapper = new LambdaQueryWrapper<>();
         if (StringUtils.hasText(keyword)) wrapper.like(Question::getContent, keyword);
         if (categoryId != null) wrapper.eq(Question::getCategoryId, categoryId);
         if (type != null) wrapper.eq(Question::getType, type);
         if (difficulty != null) wrapper.eq(Question::getDifficulty, difficulty);
+        if (courseId != null) wrapper.eq(Question::getCourseId, courseId);
         wrapper.orderByDesc(Question::getCreateTime);
         Page<Question> result = this.page(page, wrapper);
         List<QuestionDTO> list = result.getRecords().stream().map(this::toDTO).collect(Collectors.toList());

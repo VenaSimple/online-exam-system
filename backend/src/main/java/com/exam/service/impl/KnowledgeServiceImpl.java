@@ -19,11 +19,12 @@ import java.util.stream.Collectors;
 public class KnowledgeServiceImpl extends ServiceImpl<KnowledgeMapper, Knowledge> implements KnowledgeService {
 
     @Override
-    public PageResult<KnowledgeDTO> listKnowledge(Integer pageNum, Integer pageSize, String keyword, Long categoryId) {
+    public PageResult<KnowledgeDTO> listKnowledge(Integer pageNum, Integer pageSize, String keyword, Long categoryId, Long courseId) {
         Page<Knowledge> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Knowledge> wrapper = new LambdaQueryWrapper<>();
         if (StringUtils.hasText(keyword)) wrapper.like(Knowledge::getTitle, keyword);
         if (categoryId != null) wrapper.eq(Knowledge::getCategoryId, categoryId);
+        if (courseId != null) wrapper.eq(Knowledge::getCourseId, courseId);
         wrapper.eq(Knowledge::getStatus, 1);
         wrapper.orderByDesc(Knowledge::getCreateTime);
         Page<Knowledge> result = this.page(page, wrapper);

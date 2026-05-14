@@ -19,10 +19,11 @@ import java.util.stream.Collectors;
 public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> implements NoticeService {
 
     @Override
-    public PageResult<NoticeDTO> listNotices(Integer pageNum, Integer pageSize, String keyword) {
+    public PageResult<NoticeDTO> listNotices(Integer pageNum, Integer pageSize, String keyword, Long courseId) {
         Page<Notice> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Notice> wrapper = new LambdaQueryWrapper<>();
         if (StringUtils.hasText(keyword)) wrapper.like(Notice::getTitle, keyword);
+        if (courseId != null) wrapper.eq(Notice::getCourseId, courseId);
         wrapper.orderByDesc(Notice::getIsTop).orderByDesc(Notice::getCreateTime);
         Page<Notice> result = this.page(page, wrapper);
         List<NoticeDTO> list = result.getRecords().stream().map(n -> {

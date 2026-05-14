@@ -10,7 +10,7 @@ import com.exam.vo.ExamDetailVO;
 import com.exam.vo.ExamResultVO;
 
 public interface ExamService extends IService<Exam> {
-    PageResult<ExamDTO> listExams(Integer pageNum, Integer pageSize, String keyword, Integer status);
+    PageResult<ExamDTO> listExams(Integer pageNum, Integer pageSize, String keyword, Integer status, Long courseId);
     ExamDTO getExamById(Long id);
     void createExam(ExamDTO dto);
     void updateExam(ExamDTO dto);

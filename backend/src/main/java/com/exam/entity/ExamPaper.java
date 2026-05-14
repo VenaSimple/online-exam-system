@@ -20,6 +20,7 @@ public class ExamPaper {
     private Integer questionCount;     // 题目数量
     private Integer type;              // 1-固定试卷 2-随机试卷
     private Long categoryId;           // 试卷分类
+    private Long courseId;         // 所属课程ID
     private Long creatorId;
     private String creatorName;
     private Integer status;            // 0-草稿 1-启用

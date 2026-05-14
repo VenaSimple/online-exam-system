@@ -6,7 +6,7 @@ import com.exam.dto.ExamPaperDTO;
 import com.exam.entity.ExamPaper;
 
 public interface ExamPaperService extends IService<ExamPaper> {
-    PageResult<ExamPaperDTO> listPapers(Integer pageNum, Integer pageSize, String keyword);
+    PageResult<ExamPaperDTO> listPapers(Integer pageNum, Integer pageSize, String keyword, Long courseId);
     ExamPaperDTO getPaperById(Long id);
     void createPaper(ExamPaperDTO dto);
     void updatePaper(ExamPaperDTO dto);

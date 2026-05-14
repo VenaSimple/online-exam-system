@@ -18,8 +18,9 @@ public class ExamPaperController {
     public Result<PageResult<ExamPaperDTO>> list(
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
-            @RequestParam(required = false) String keyword) {
-        return Result.success(paperService.listPapers(pageNum, pageSize, keyword));
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long courseId) {
+        return Result.success(paperService.listPapers(pageNum, pageSize, keyword, courseId));
     }
 
     @GetMapping("/{id}")

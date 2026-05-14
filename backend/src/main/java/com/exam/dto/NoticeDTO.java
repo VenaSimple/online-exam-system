@@ -10,6 +10,7 @@ public class NoticeDTO {
     private Integer type;
     private Integer isTop;
     private Integer status;
+    private Long courseId;
     private Long publisherId;
     private String publisherName;
 }

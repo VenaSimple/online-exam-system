@@ -6,7 +6,7 @@ import com.exam.dto.KnowledgeDTO;
 import com.exam.entity.Knowledge;
 
 public interface KnowledgeService extends IService<Knowledge> {
-    PageResult<KnowledgeDTO> listKnowledge(Integer pageNum, Integer pageSize, String keyword, Long categoryId);
+    PageResult<KnowledgeDTO> listKnowledge(Integer pageNum, Integer pageSize, String keyword, Long categoryId, Long courseId);
     KnowledgeDTO getKnowledgeById(Long id);
     void createKnowledge(KnowledgeDTO dto);
     void updateKnowledge(KnowledgeDTO dto);

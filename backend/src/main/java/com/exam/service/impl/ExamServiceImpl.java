@@ -34,11 +34,12 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     private final ExamAnswerMapper answerMapper;
 
     @Override
-    public PageResult<ExamDTO> listExams(Integer pageNum, Integer pageSize, String keyword, Integer status) {
+    public PageResult<ExamDTO> listExams(Integer pageNum, Integer pageSize, String keyword, Integer status, Long courseId) {
         Page<Exam> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Exam> wrapper = new LambdaQueryWrapper<>();
         if (StringUtils.hasText(keyword)) wrapper.like(Exam::getTitle, keyword);
         if (status != null) wrapper.eq(Exam::getStatus, status);
+        if (courseId != null) wrapper.eq(Exam::getCourseId, courseId);
         wrapper.orderByDesc(Exam::getCreateTime);
         Page<Exam> result = this.page(page, wrapper);
         List<ExamDTO> list = result.getRecords().stream().map(e -> {

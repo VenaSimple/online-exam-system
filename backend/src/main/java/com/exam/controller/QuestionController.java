@@ -24,8 +24,9 @@ public class QuestionController {
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Integer type,
-            @RequestParam(required = false) Integer difficulty) {
-        return Result.success(questionService.listQuestions(pageNum, pageSize, keyword, categoryId, type, difficulty));
+            @RequestParam(required = false) Integer difficulty,
+            @RequestParam(required = false) Long courseId) {
+        return Result.success(questionService.listQuestions(pageNum, pageSize, keyword, categoryId, type, difficulty, courseId));
     }
 
     @GetMapping("/{id}")

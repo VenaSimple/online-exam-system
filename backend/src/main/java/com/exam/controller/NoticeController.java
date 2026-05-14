@@ -18,8 +18,9 @@ public class NoticeController {
     public Result<PageResult<NoticeDTO>> list(
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
-            @RequestParam(required = false) String keyword) {
-        return Result.success(noticeService.listNotices(pageNum, pageSize, keyword));
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long courseId) {
+        return Result.success(noticeService.listNotices(pageNum, pageSize, keyword, courseId));
     }
 
     @GetMapping("/{id}")

@@ -10,6 +10,7 @@ public class KnowledgeDTO {
     private String summary;
     private Long categoryId;
     private String categoryName;
+    private Long courseId;
     private String cover;
     private Long authorId;
     private String authorName;

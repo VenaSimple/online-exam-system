@@ -19,6 +19,7 @@ public class Question {
     private String analysis;       // 解析
     private Long categoryId;      // 题目分类ID
     private String categoryName;  // 分类名称
+    private Long courseId;         // 所属课程ID
     private Integer difficulty;    // 难度: 1-简单 2-中等 3-困难
     private Integer score;         // 分值
     private Long creatorId;        // 创建者ID

@@ -11,6 +11,7 @@ public class QuestionDTO {
     private String answer;
     private String analysis;
     private Long categoryId;
+    private Long courseId;
     private String categoryName;
     private Integer difficulty;
     private Integer score;

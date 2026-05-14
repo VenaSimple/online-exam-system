@@ -7,7 +7,7 @@ import com.exam.entity.Question;
 import java.util.List;
 
 public interface QuestionService extends IService<Question> {
-    PageResult<QuestionDTO> listQuestions(Integer pageNum, Integer pageSize, String keyword, Long categoryId, Integer type, Integer difficulty);
+    PageResult<QuestionDTO> listQuestions(Integer pageNum, Integer pageSize, String keyword, Long categoryId, Integer type, Integer difficulty, Long courseId);
     QuestionDTO getQuestionById(Long id);
     void createQuestion(QuestionDTO dto);
     void updateQuestion(QuestionDTO dto);

@@ -15,6 +15,7 @@ public class Exam {
     private String title;
     private Long paperId;
     private String paperTitle;
+    private Long courseId;         // 所属课程ID
     private Integer examType;          // 1-正式考试 2-模拟考试 3-练习
     private Integer status;            // 0-草稿 1-已发布 2-进行中 3-已结束
     private LocalDateTime startTime;

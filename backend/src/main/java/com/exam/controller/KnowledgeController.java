@@ -19,8 +19,9 @@ public class KnowledgeController {
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) Long categoryId) {
-        return Result.success(knowledgeService.listKnowledge(pageNum, pageSize, keyword, categoryId));
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long courseId) {
+        return Result.success(knowledgeService.listKnowledge(pageNum, pageSize, keyword, categoryId, courseId));
     }
 
     @GetMapping("/{id}")
