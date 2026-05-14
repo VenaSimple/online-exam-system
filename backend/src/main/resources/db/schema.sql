@@ -310,13 +310,13 @@ CREATE TABLE certificate (
 -- 初始化数据
 -- =========================================================
 
--- 管理员 (密码: admin123)
+-- 管理员 (密码: admin123 -> BCrypt加密)
 INSERT INTO sys_user (username, password, real_name, role, status) VALUES
-('admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', '系统管理员', 'admin', 1),
-('teacher01', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', '张老师', 'teacher', 1),
-('teacher02', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', '李老师', 'teacher', 1),
-('student01', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', '王同学', 'student', 1),
-('student02', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iKTVKIUi', '赵同学', 'student', 1);
+('admin', '$2a$10$4Rd3MK9YXMvBETg0qv.ol.l6cqSMk8LJZBQs45rzjjSvSFKqCtlbG', '系统管理员', 'admin', 1),
+('teacher01', '$2a$10$4Rd3MK9YXMvBETg0qv.ol.l6cqSMk8LJZBQs45rzjjSvSFKqCtlbG', '张老师', 'teacher', 1),
+('teacher02', '$2a$10$4Rd3MK9YXMvBETg0qv.ol.l6cqSMk8LJZBQs45rzjjSvSFKqCtlbG', '李老师', 'teacher', 1),
+('student01', '$2a$10$4Rd3MK9YXMvBETg0qv.ol.l6cqSMk8LJZBQs45rzjjSvSFKqCtlbG', '王同学', 'student', 1),
+('student02', '$2a$10$4Rd3MK9YXMvBETg0qv.ol.l6cqSMk8LJZBQs45rzjjSvSFKqCtlbG', '赵同学', 'student', 1);
 
 -- 机构
 INSERT INTO organization (name, code, type, leader) VALUES
