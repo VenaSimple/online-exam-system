@@ -2,22 +2,21 @@ package com.exam.controller;
 
 import com.exam.common.PageResult;
 import com.exam.common.Result;
-import com.exam.dto.QuestionCategoryDTO;
-import com.exam.service.QuestionCategoryService;
+import com.exam.dto.CourseCategoryDTO;
+import com.exam.service.CourseCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/question/category")
+@RequestMapping("/course/category")
 @RequiredArgsConstructor
-public class QuestionCategoryController {
-
-    private final QuestionCategoryService categoryService;
+public class CourseCategoryController {
+    private final CourseCategoryService categoryService;
 
     @GetMapping("/list")
-    public Result<PageResult<QuestionCategoryDTO>> list(
+    public Result<PageResult<CourseCategoryDTO>> list(
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String keyword) {
@@ -25,23 +24,23 @@ public class QuestionCategoryController {
     }
 
     @GetMapping("/all")
-    public Result<List<QuestionCategoryDTO>> listAll() {
+    public Result<List<CourseCategoryDTO>> listAll() {
         return Result.success(categoryService.listAllCategories());
     }
 
     @GetMapping("/{id}")
-    public Result<QuestionCategoryDTO> getById(@PathVariable Long id) {
+    public Result<CourseCategoryDTO> getById(@PathVariable Long id) {
         return Result.success(categoryService.getCategoryById(id));
     }
 
     @PostMapping
-    public Result<Void> create(@RequestBody QuestionCategoryDTO dto) {
+    public Result<Void> create(@RequestBody CourseCategoryDTO dto) {
         categoryService.createCategory(dto);
         return Result.success();
     }
 
     @PutMapping
-    public Result<Void> update(@RequestBody QuestionCategoryDTO dto) {
+    public Result<Void> update(@RequestBody CourseCategoryDTO dto) {
         categoryService.updateCategory(dto);
         return Result.success();
     }

@@ -2,7 +2,7 @@ package com.exam.controller;
 
 import com.exam.common.PageResult;
 import com.exam.common.Result;
-import com.exam.entity.News;
+import com.exam.dto.NewsDTO;
 import com.exam.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ public class NewsController {
     private final NewsService newsService;
 
     @GetMapping("/list")
-    public Result<PageResult<News>> list(
+    public Result<PageResult<NewsDTO>> list(
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String keyword) {
@@ -23,19 +23,19 @@ public class NewsController {
     }
 
     @GetMapping("/{id}")
-    public Result<News> getById(@PathVariable Long id) {
-        return Result.success(newsService.getById(id));
+    public Result<NewsDTO> getById(@PathVariable Long id) {
+        return Result.success(newsService.getNewsById(id));
     }
 
     @PostMapping
-    public Result<Void> create(@RequestBody News news) {
-        newsService.createNews(news);
+    public Result<Void> create(@RequestBody NewsDTO dto) {
+        newsService.createNews(dto);
         return Result.success();
     }
 
     @PutMapping
-    public Result<Void> update(@RequestBody News news) {
-        newsService.updateNews(news);
+    public Result<Void> update(@RequestBody NewsDTO dto) {
+        newsService.updateNews(dto);
         return Result.success();
     }
 

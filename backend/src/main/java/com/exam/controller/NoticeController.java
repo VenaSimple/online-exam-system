@@ -2,7 +2,7 @@ package com.exam.controller;
 
 import com.exam.common.PageResult;
 import com.exam.common.Result;
-import com.exam.entity.Notice;
+import com.exam.dto.NoticeDTO;
 import com.exam.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ public class NoticeController {
     private final NoticeService noticeService;
 
     @GetMapping("/list")
-    public Result<PageResult<Notice>> list(
+    public Result<PageResult<NoticeDTO>> list(
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String keyword) {
@@ -23,19 +23,19 @@ public class NoticeController {
     }
 
     @GetMapping("/{id}")
-    public Result<Notice> getById(@PathVariable Long id) {
-        return Result.success(noticeService.getById(id));
+    public Result<NoticeDTO> getById(@PathVariable Long id) {
+        return Result.success(noticeService.getNoticeById(id));
     }
 
     @PostMapping
-    public Result<Void> create(@RequestBody Notice notice) {
-        noticeService.createNotice(notice);
+    public Result<Void> create(@RequestBody NoticeDTO dto) {
+        noticeService.createNotice(dto);
         return Result.success();
     }
 
     @PutMapping
-    public Result<Void> update(@RequestBody Notice notice) {
-        noticeService.updateNotice(notice);
+    public Result<Void> update(@RequestBody NoticeDTO dto) {
+        noticeService.updateNotice(dto);
         return Result.success();
     }
 

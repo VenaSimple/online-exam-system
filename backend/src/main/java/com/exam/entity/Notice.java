@@ -16,6 +16,7 @@ public class Notice {
     private String content;
     private Integer type;          // 1-通知 2-公告
     private Integer isTop;        // 是否置顶 0-否 1-是
+    private Integer status;          // 0-草稿 1-已发布
     private Long publisherId;
     private String publisherName;
     @TableField(fill = FieldFill.INSERT)

@@ -4,13 +4,9 @@ import com.exam.common.PageResult;
 import com.exam.common.Result;
 import com.exam.dto.CourseDTO;
 import com.exam.service.CourseService;
-import com.exam.service.CourseCategoryService;
-import com.exam.entity.CourseCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/course")
@@ -18,7 +14,6 @@ import java.util.List;
 public class CourseController {
 
     private final CourseService courseService;
-    private final CourseCategoryService categoryService;
 
     @GetMapping("/list")
     public Result<PageResult<CourseDTO>> list(
@@ -65,23 +60,6 @@ public class CourseController {
     @PutMapping("/{id}/status")
     public Result<Void> updateStatus(@PathVariable Long id, @RequestParam Integer status) {
         courseService.updateStatus(id, status);
-        return Result.success();
-    }
-
-    @GetMapping("/categories")
-    public Result<List<CourseCategory>> listCategories() {
-        return Result.success(categoryService.list());
-    }
-
-    @PostMapping("/categories")
-    public Result<Void> createCategory(@RequestBody CourseCategory category) {
-        categoryService.save(category);
-        return Result.success();
-    }
-
-    @DeleteMapping("/categories/{id}")
-    public Result<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.removeById(id);
         return Result.success();
     }
 }

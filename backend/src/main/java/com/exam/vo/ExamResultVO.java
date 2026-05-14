@@ -16,6 +16,7 @@ public class ExamResultVO {
     @Data
     public static class AnswerResultVO {
         private Long questionId;
+        private Integer questionType;
         private String questionContent;
         private String options;
         private String correctAnswer;

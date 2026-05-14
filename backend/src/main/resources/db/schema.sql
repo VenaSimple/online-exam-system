@@ -268,6 +268,7 @@ CREATE TABLE notice (
     content LONGTEXT,
     type INT DEFAULT 1 COMMENT '1通知2公告',
     is_top INT DEFAULT 0 COMMENT '0否1是',
+    status INT DEFAULT 1 COMMENT '0草稿1已发布',
     publisher_id BIGINT,
     publisher_name VARCHAR(50),
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,

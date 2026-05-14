@@ -8,21 +8,21 @@ import com.exam.dto.QuestionCategoryDTO;
 import com.exam.entity.QuestionCategory;
 import com.exam.mapper.QuestionCategoryMapper;
 import com.exam.service.QuestionCategoryService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class QuestionCategoryServiceImpl extends ServiceImpl<QuestionCategoryMapper, QuestionCategory> implements QuestionCategoryService {
 
     @Override
-    public PageResult<QuestionCategoryDTO> listCategories(Integer pageNum, Integer pageSize) {
+    public PageResult<QuestionCategoryDTO> listCategories(Integer pageNum, Integer pageSize, String keyword) {
         Page<QuestionCategory> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<QuestionCategory> wrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.hasText(keyword)) wrapper.like(QuestionCategory::getName, keyword);
         wrapper.orderByAsc(QuestionCategory::getSort);
         Page<QuestionCategory> result = this.page(page, wrapper);
         List<QuestionCategoryDTO> list = result.getRecords().stream().map(c -> {
@@ -35,8 +35,8 @@ public class QuestionCategoryServiceImpl extends ServiceImpl<QuestionCategoryMap
 
     @Override
     public List<QuestionCategoryDTO> listAllCategories() {
-        List<QuestionCategory> categories = this.list(new LambdaQueryWrapper<QuestionCategory>().orderByAsc(QuestionCategory::getSort));
-        return categories.stream().map(c -> {
+        List<QuestionCategory> list = this.list(new LambdaQueryWrapper<QuestionCategory>().orderByAsc(QuestionCategory::getSort));
+        return list.stream().map(c -> {
             QuestionCategoryDTO dto = new QuestionCategoryDTO();
             BeanUtils.copyProperties(c, dto);
             return dto;
@@ -45,28 +45,30 @@ public class QuestionCategoryServiceImpl extends ServiceImpl<QuestionCategoryMap
 
     @Override
     public QuestionCategoryDTO getCategoryById(Long id) {
-        QuestionCategory category = this.getById(id);
-        if (category == null) throw new RuntimeException("题目分类不存在");
+        QuestionCategory entity = this.getById(id);
+        if (entity == null) throw new RuntimeException("分类不存在");
         QuestionCategoryDTO dto = new QuestionCategoryDTO();
-        BeanUtils.copyProperties(category, dto);
+        BeanUtils.copyProperties(entity, dto);
         return dto;
     }
 
     @Override
     public void createCategory(QuestionCategoryDTO dto) {
-        QuestionCategory category = new QuestionCategory();
-        BeanUtils.copyProperties(dto, category);
-        this.save(category);
+        QuestionCategory entity = new QuestionCategory();
+        BeanUtils.copyProperties(dto, entity);
+        this.save(entity);
     }
 
     @Override
     public void updateCategory(QuestionCategoryDTO dto) {
-        QuestionCategory category = this.getById(dto.getId());
-        if (category == null) throw new RuntimeException("题目分类不存在");
-        BeanUtils.copyProperties(dto, category);
-        this.updateById(category);
+        QuestionCategory entity = this.getById(dto.getId());
+        if (entity == null) throw new RuntimeException("分类不存在");
+        BeanUtils.copyProperties(dto, entity);
+        this.updateById(entity);
     }
 
     @Override
-    public void deleteCategory(Long id) { this.removeById(id); }
+    public void deleteCategory(Long id) {
+        this.removeById(id);
+    }
 }

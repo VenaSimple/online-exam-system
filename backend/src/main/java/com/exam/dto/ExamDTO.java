@@ -20,4 +20,7 @@ public class ExamDTO {
     private Integer showAnalysis;
     private String participantIds;
     private String participantType;
+    private String paperTitle;
+    private Long creatorId;
+    private String creatorName;
 }
